@@ -19,9 +19,9 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 })
 export class MessagesPageComponent implements OnInit, OnDestroy {
   /** Table paginator */
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   /** Table sort */
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatSort) sort!: MatSort;
 
   displayedColumns: string[] = ['id', 'date', 'name', 'text', 'action'];
 
@@ -68,7 +68,7 @@ export class MessagesPageComponent implements OnInit, OnDestroy {
   /**
    * open a dialog box
    */
-  openDialog(message = null) {
+  openDialog(message = null): void {
     let dialogRef;
     if (message) {
       dialogRef = this.dialog.open(DialogBoxComponent, {
