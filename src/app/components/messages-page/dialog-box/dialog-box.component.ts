@@ -39,13 +39,9 @@ export class DialogBoxComponent implements OnDestroy {
   messageData!: IMessage;
 
   messageForm: FormGroup = this.formBuilder.group({
-    name: new FormControl<string>('', [
-      Validators.required,
-      Validators.minLength(1),
-    ]),
+    name: new FormControl<string>('', [Validators.required]),
     text: new FormControl<string>('', [
       Validators.required,
-      Validators.minLength(3),
       Validators.maxLength(255),
     ]),
   });
@@ -117,7 +113,7 @@ export class DialogBoxComponent implements OnDestroy {
    */
   closeDialog(): void {
     this.formReference?.resetForm();
-    this.dialogRef.close({ event: 'Cancel' });
+    this.dialogRef.close();
   }
 
   private openSnackBar(message: string, action: string): void {

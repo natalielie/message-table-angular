@@ -11,6 +11,16 @@
         <mat-form-field class="name field" appearance="outline">
           <mat-label>Message</mat-label>
           <input matInput value="" formControlName="name" />
+          <mat-error
+            class="text-danger"
+            *ngIf="
+              messageForm.controls['name'].invalid &&
+              (messageForm.controls['name'].dirty ||
+                messageForm.controls['name'].touched)
+            "
+          >
+            Message name is required
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="text field" appearance="outline">
@@ -24,6 +34,26 @@
             cdkAutosizeMinRows="7"
             cdkAutosizeMaxRows="10"
           ></textarea>
+          <mat-error
+            class="text-danger"
+            *ngIf="
+              messageForm.controls['text'].value.length < 1 &&
+              (messageForm.controls['text'].dirty ||
+                messageForm.controls['text'].touched)
+            "
+          >
+            Message text is required
+          </mat-error>
+          <mat-error
+            class="text-danger"
+            *ngIf="
+              messageForm.controls['text'].value.length > 255 &&
+              (messageForm.controls['text'].dirty ||
+                messageForm.controls['text'].touched)
+            "
+          >
+            Message text length should not be more than 255 symbols
+          </mat-error>
         </mat-form-field>
 
         <div class="button-wrapper">
