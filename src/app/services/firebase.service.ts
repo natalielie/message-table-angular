@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
-import { IMessage } from '../interfaces/message.interface';
-import { Observable, catchError, map, of, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+
+import { IMessage } from '../interfaces/message.interface';
 import { LoaderService } from './loader.service';
 
+/**
+ * service to handle firebase requests
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -13,6 +17,9 @@ export class FirebaseService {
     private loaderService: LoaderService
   ) {}
 
+  /**
+   * get all messages from the db
+   */
   getMessages(): Observable<IMessage[]> {
     this.loaderService.showLoader();
     return this.fbs
@@ -23,8 +30,7 @@ export class FirebaseService {
           return actions.map((action) => {
             const data = action.payload.doc.data() as IMessage;
             data.id = action.payload.doc.id;
-            const _id = data.id;
-            return { _id, ...data };
+            return { ...data };
           }, this.loaderService.hideLoader());
         }),
         catchError((error) => {
@@ -34,6 +40,9 @@ export class FirebaseService {
       );
   }
 
+  /**
+   * send a message to a db
+   */
   sendMessage(message: IMessage): Observable<boolean> {
     this.loaderService.showLoader();
     return new Observable<boolean>((observer) => {
@@ -46,7 +55,6 @@ export class FirebaseService {
           date: new Date().toString(),
         })
         .then((docRef) => {
-          console.log('Document written with ID: ', docRef.id);
           observer.next(true);
           observer.complete();
         })
@@ -58,6 +66,9 @@ export class FirebaseService {
     });
   }
 
+  /**
+   * delete a message from the db
+   */
   deleteMessage(messageId: string): Observable<boolean> {
     this.loaderService.showLoader();
     return new Observable<boolean>((observer) => {
@@ -73,7 +84,7 @@ export class FirebaseService {
           this.loaderService.hideLoader();
         })
         .catch((error) => {
-          console.error('Error adding document: ', error);
+          console.error('Error deleting document: ', error);
           observer.next(false);
           observer.complete();
 

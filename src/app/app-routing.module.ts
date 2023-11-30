@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { homePath, messagesPath } from './shared/globals';
+import { homePath } from './shared/globals';
 import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
@@ -16,12 +16,6 @@ const routes: Routes = [
       import(
         './components/messages-page/lazy-loading/lazy-loading.module'
       ).then((m) => m.LazyLoadingModule),
-    // loadChildren: async () =>
-    //   (
-    //     await import(
-    //       './components/messages-page/lazy-loading/lazy-loading.module'
-    //     )
-    //   ).LazyLoadingModule,
   },
 ];
 

@@ -14,7 +14,10 @@
   margin: 50px 100px;
 }
 
-.container,
+.container {
+  margin-bottom: 50px;
+}
+
 mat-table {
   width: 100%;
   display: table;

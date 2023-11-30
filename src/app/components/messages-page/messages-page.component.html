@@ -91,13 +91,10 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </mat-table>
 
-      <ng-container class="no-question" *ngIf="dataSource.data.length === 0">
+      <ng-container class="no-message" *ngIf="dataSource.data.length === 0">
         <h2>There's no message yet</h2>
       </ng-container>
-      <mat-paginator
-        [pageSizeOptions]="[5, 10, 20, 50]"
-        (page)="updateRouteParameters($event)"
-      ></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]"></mat-paginator>
     </div>
   </div>
 </div>

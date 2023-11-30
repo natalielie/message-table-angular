@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
+/**
+ * a service to handle spinner loading
+ */
 @Injectable({
   providedIn: 'root',
 })

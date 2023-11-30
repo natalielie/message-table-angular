@@ -20,8 +20,4 @@ export class NavbarComponent {
   goToMessagesPage(): void {
     this.router.navigate([messagesPath]);
   }
-
-  // goCreatePage(): void {
-  //   this.router.navigate([createPath]);
-  // }
 }

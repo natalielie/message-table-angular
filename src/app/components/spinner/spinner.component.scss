@@ -1,4 +1,14 @@
 .spinner-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 805px;
+  z-index: 9998;
+}
+
+mat-spinner {
   position: absolute;
   left: 50%;
   top: 50%;
