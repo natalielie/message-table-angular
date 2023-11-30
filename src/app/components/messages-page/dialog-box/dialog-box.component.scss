@@ -27,6 +27,13 @@
   height: 30px;
 }
 
+.button-wrapper-delete {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  gap: 20px;
+}
+
 .card-body {
   display: flex;
   margin: 5%;

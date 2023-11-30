@@ -13,6 +13,7 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { Subject, catchError, map, takeUntil } from 'rxjs';
 import { LoaderService } from 'src/app/services/loader.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { IMessage } from 'src/app/interfaces/message.interface';
 
 /**
  * A component of a Delete dialog box
@@ -32,6 +33,7 @@ export class DialogBoxComponent {
 
   resultText!: string;
   action = 'Ok';
+  messageData!: IMessage;
 
   messageForm: FormGroup = this.formBuilder.group({
     name: new FormControl<string>('', [
@@ -49,10 +51,19 @@ export class DialogBoxComponent {
 
   constructor(
     public dialogRef: MatDialogRef<DialogBoxComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: IMessage,
     public fbService: FirebaseService,
     private formBuilder: FormBuilder,
     private _snackBar: MatSnackBar
-  ) {}
+  ) {
+    if (data) {
+      this.messageData = data;
+    }
+  }
+
+  deleteMessage() {
+    this.dialogRef.close({ event: 'Delete', data: this.messageData });
+  }
 
   onSubmit(): void {
     if (this.messageForm.valid) {

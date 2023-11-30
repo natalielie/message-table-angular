@@ -30,7 +30,7 @@
         <ng-container matColumnDef="id">
           <th class="header id-column" mat-header-cell *matHeaderCellDef>ID</th>
           <td mat-cell *matCellDef="let element">
-            {{ element._id }}
+            {{ element.id }}
           </td>
         </ng-container>
 
@@ -62,8 +62,28 @@
           <th class="header text-column" mat-header-cell *matHeaderCellDef>
             Message Text
           </th>
-          <td mat-cell *matCellDef="let element">
+          <td mat-cell class="text-column-cell" *matCellDef="let element">
             {{ showMessageText(element.text) }}
+          </td>
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell class="header action-column" *matHeaderCellDef>
+            Action
+          </th>
+          <td mat-cell *matCellDef="let element" class="action-link">
+            <div class="btn-wrapper">
+              <button
+                mat-raised-button
+                color="warn"
+                (click)="openDialog(element)"
+              >
+                <div class="mat-icon">
+                  <mat-icon>delete</mat-icon>
+                </div>
+              </button>
+            </div>
           </td>
         </ng-container>
 

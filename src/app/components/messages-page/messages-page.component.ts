@@ -11,7 +11,7 @@ import { DialogBoxComponent } from './dialog-box/dialog-box.component';
 import { IMessage } from 'src/app/interfaces/message.interface';
 import { homePath } from 'src/app/shared/globals';
 import { FirebaseService } from 'src/app/services/firebase.service';
-import { LoaderService } from 'src/app/services/loader.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-messages-page',
@@ -24,7 +24,7 @@ export class MessagesPageComponent implements OnInit, OnDestroy {
   /** Table sort */
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
-  displayedColumns: string[] = ['id', 'date', 'name', 'text'];
+  displayedColumns: string[] = ['id', 'date', 'name', 'text', 'action'];
 
   dataSource = new MatTableDataSource<IMessage>([]);
 
@@ -50,19 +50,22 @@ export class MessagesPageComponent implements OnInit, OnDestroy {
     private location: Location,
     public dialog: MatDialog,
     private firebaseService: FirebaseService,
-    private loaderService: LoaderService
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
-    this.firebaseService.getMessages().subscribe((messages) => {
-      this.dataSource.data = messages;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      if (this.paginator) {
-        this.paginator.pageIndex = this.page;
-        this.paginator.pageSize = this.pageSize;
-      }
-    });
+    this.firebaseService
+      .getMessages()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((messages) => {
+        this.dataSource.data = messages;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        if (this.paginator) {
+          this.paginator.pageIndex = this.page;
+          this.paginator.pageSize = this.pageSize;
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -90,15 +93,45 @@ export class MessagesPageComponent implements OnInit, OnDestroy {
   /**
    * open a dialog box on delete
    */
-  openDialog() {
-    const dialogRef = this.dialog.open(DialogBoxComponent, {
-      width: this.dialogWidth,
-      height: this.dialogHeight,
-    });
+  openDialog(message = null) {
+    let dialogRef;
+    if (message) {
+      dialogRef = this.dialog.open(DialogBoxComponent, {
+        width: '400px',
+        data: message,
+      });
+    } else {
+      dialogRef = this.dialog.open(DialogBoxComponent, {
+        width: this.dialogWidth,
+        height: this.dialogHeight,
+        data: message,
+      });
+    }
 
     dialogRef
       .afterClosed()
-      .subscribe((result: { event: string; data: IMessage }) => {});
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((result: { event: string; data: IMessage }) => {
+        if (result.event == 'Delete') {
+          this.deleteMessage(result.data);
+        }
+      });
+  }
+
+  /**
+   * Delete message from table and db
+   */
+  private deleteMessage(message: IMessage) {
+    this.dataSource.data.forEach((element) => {
+      if (element.id === message.id) {
+        this.firebaseService
+          .deleteMessage(message.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((value) => {
+            this.openSnackBar('Message was removed', 'Ok');
+          });
+      }
+    });
   }
 
   showMessageText(text: string): string {
@@ -114,5 +147,11 @@ export class MessagesPageComponent implements OnInit, OnDestroy {
    */
   goBack(): void {
     this.router.navigate([homePath]);
+  }
+
+  private openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 3000,
+    });
   }
 }

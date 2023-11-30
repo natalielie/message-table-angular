@@ -22,7 +22,8 @@ export class FirebaseService {
         map((actions) => {
           return actions.map((action) => {
             const data = action.payload.doc.data() as IMessage;
-            const _id = action.payload.doc.id;
+            data.id = action.payload.doc.id;
+            const _id = data.id;
             return { _id, ...data };
           }, this.loaderService.hideLoader());
         }),
@@ -53,6 +54,30 @@ export class FirebaseService {
           console.error('Error adding document: ', error);
           observer.next(false);
           observer.complete();
+        });
+    });
+  }
+
+  deleteMessage(messageId: string): Observable<boolean> {
+    this.loaderService.showLoader();
+    return new Observable<boolean>((observer) => {
+      this.loaderService.showLoader();
+      this.fbs
+        .collection('messages')
+        .doc(messageId)
+        .delete()
+        .then(() => {
+          observer.next(true);
+          observer.complete();
+
+          this.loaderService.hideLoader();
+        })
+        .catch((error) => {
+          console.error('Error adding document: ', error);
+          observer.next(false);
+          observer.complete();
+
+          this.loaderService.hideLoader();
         });
     });
   }
