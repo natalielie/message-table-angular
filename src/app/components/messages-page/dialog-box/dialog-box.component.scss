@@ -1,0 +1,45 @@
+.button-wrapper {
+  margin-bottom: 10px;
+  gap: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-cancel {
+  position: absolute;
+  top: 79%;
+  right: 30%;
+}
+
+.btn-submit {
+  margin-right: 30%;
+}
+
+.btn-close {
+  font-size: 25px;
+}
+
+.btn-close-wrapper {
+  position: absolute;
+  right: 45px;
+  top: 15px;
+  width: 30px;
+  height: 30px;
+}
+
+.card-body {
+  display: flex;
+  margin: 5%;
+}
+
+mat-form-field {
+  width: 400px;
+}
+
+.text {
+  height: 200px;
+}
+
+button {
+  margin-bottom: 10px;
+}

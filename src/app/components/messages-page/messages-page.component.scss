@@ -1,0 +1,63 @@
+.list-title {
+  float: left;
+  margin: 50px 80px;
+}
+
+.table-holder {
+  display: table;
+  width: 90%;
+  margin: 5%;
+}
+
+.go-to-create-page {
+  float: right;
+  margin: 50px 100px;
+}
+
+mat-table {
+  width: 100%;
+  display: table;
+}
+
+.header {
+  font-size: 20px;
+}
+
+button {
+  margin: 5px;
+}
+
+td {
+  text-align: center;
+  padding: 10px;
+}
+
+th {
+  text-align: center;
+  padding: 30px;
+}
+
+.id-column {
+  width: 15%;
+}
+
+.date-column {
+  width: 15%;
+}
+
+.name-column {
+  width: 20%;
+}
+
+.text-column {
+  width: 40%;
+}
+
+h2 {
+  margin: 50px 40%;
+}
+
+.mat-icon {
+  display: flex;
+  flex-wrap: initial;
+}
