@@ -6,13 +6,13 @@
 }
 
 .btn-cancel {
-  position: absolute;
-  top: 84%;
-  right: 30%;
+  left: 53%;
+  margin-top: -18%;
 }
 
 .btn-submit {
   margin-right: 30%;
+  margin-top: -5%;
 }
 
 .btn-close {
@@ -35,7 +35,6 @@
 }
 
 .card-body {
-  display: flex;
   margin: 0 5%;
 }
 
@@ -53,4 +52,8 @@ mat-form-field {
 
 button {
   margin-bottom: 10px;
+}
+
+.card-body {
+  height: fit-content;
 }

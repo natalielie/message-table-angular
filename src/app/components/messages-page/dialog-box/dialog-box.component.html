@@ -5,7 +5,7 @@
   <div class="btn-close-wrapper">
     <button class="btn btn-close" mat-button (click)="closeDialog()">×</button>
   </div>
-  <div mat-dialog-content>
+  <div mat-dialog-content class="container">
     <div class="card-body">
       <form class="form" [formGroup]="messageForm" (ngSubmit)="onSubmit()">
         <mat-form-field class="name field" appearance="outline">
@@ -68,15 +68,9 @@
           </button>
         </div>
       </form>
-      <div class="button-wrapper">
-        <button
-          class="btn btn-cancel"
-          mat-raised-button
-          (click)="closeDialog()"
-        >
-          Cancel
-        </button>
-      </div>
+      <button class="btn btn-cancel" mat-raised-button (click)="closeDialog()">
+        Cancel
+      </button>
     </div>
   </div>
 </div>

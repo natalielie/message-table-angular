@@ -9,5 +9,6 @@
 
 .img-welcome {
   margin: 0 40%;
-  height: 300px;
+  object-fit: contain;
+  width: -webkit-fill-available;
 }

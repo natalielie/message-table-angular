@@ -1,3 +1,23 @@
+#warning-message {
+  display: none;
+  display: inline-flex;
+  margin: 0 20%;
+  text-align: center;
+}
+@media only screen and (orientation: portrait) {
+  #wrapper {
+    display: none;
+  }
+  #warning-message {
+    display: block;
+  }
+}
+@media only screen and (orientation: landscape) {
+  #warning-message {
+    display: none;
+  }
+}
+
 .list-title {
   float: left;
   margin: 50px 80px;

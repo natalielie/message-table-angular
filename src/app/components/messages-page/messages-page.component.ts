@@ -32,7 +32,7 @@ export class MessagesPageComponent implements OnInit, OnDestroy {
 
   dialogDeleteWidth = '400px';
   dialogCreateWidth = '500px';
-  dialogCreateHeight = '500px';
+  dialogCreateHeight = '510px';
 
   /** data for a paginator */
   page = 0;

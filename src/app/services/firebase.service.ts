@@ -54,7 +54,7 @@ export class FirebaseService {
           text: message.text,
           date: new Date().toString(),
         })
-        .then((docRef) => {
+        .then(() => {
           observer.next(true);
           observer.complete();
         })
