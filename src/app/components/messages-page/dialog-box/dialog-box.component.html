@@ -9,7 +9,7 @@
     <div class="card-body">
       <form class="form" [formGroup]="messageForm" (ngSubmit)="onSubmit()">
         <mat-form-field class="name field" appearance="outline">
-          <mat-label>Message</mat-label>
+          <mat-label>Title</mat-label>
           <input matInput value="" formControlName="name" />
           <mat-error
             class="text-danger"
@@ -19,7 +19,7 @@
                 messageForm.controls['name'].touched)
             "
           >
-            Message name is required
+            Title is required
           </mat-error>
         </mat-form-field>
 

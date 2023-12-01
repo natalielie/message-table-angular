@@ -1,15 +1,14 @@
 #warning-message {
   display: none;
-  display: inline-flex;
-  margin: 0 20%;
-  text-align: center;
 }
 @media only screen and (orientation: portrait) {
   #wrapper {
     display: none;
   }
   #warning-message {
-    display: block;
+    display: inline-flex;
+    margin: 30% 20%;
+    text-align: center;
   }
 }
 @media only screen and (orientation: landscape) {
