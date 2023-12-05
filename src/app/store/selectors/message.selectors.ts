@@ -7,5 +7,3 @@ export const selectAllMessages = createSelector(
   messagesFeature,
   (state) => state.messages
 );
-
-export const selectState = createSelector(messagesFeature, (state) => state);
