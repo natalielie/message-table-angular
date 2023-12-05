@@ -1,5 +1,5 @@
-import { Component, Inject, OnDestroy, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, ViewChild } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import {
   FormBuilder,
   FormGroup,
@@ -7,7 +7,6 @@ import {
   FormControl,
   FormGroupDirective,
 } from '@angular/forms';
-import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import * as MessageActions from '../../../../store/actions/message.actions';
@@ -19,10 +18,10 @@ import { IMessage } from 'src/app/interfaces/message.interface';
  */
 @Component({
   selector: 'app-dialog-box',
-  templateUrl: './dialog-box.component.html',
-  styleUrls: ['./dialog-box.component.scss'],
+  templateUrl: './dialog-box-create.component.html',
+  styleUrls: ['./dialog-box-create.component.scss'],
 })
-export class DialogBoxComponent implements OnDestroy {
+export class CreateDialogBoxComponent {
   /**
    * A reference to the `messageForm` template within the component's view.
    * Allows working with a form reference, not form itself
@@ -40,23 +39,11 @@ export class DialogBoxComponent implements OnDestroy {
     ]),
   });
 
-  destroy$: Subject<boolean> = new Subject<boolean>();
-
   constructor(
-    public dialogRef: MatDialogRef<DialogBoxComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: IMessage,
+    public dialogRef: MatDialogRef<CreateDialogBoxComponent>,
     private store: Store<AppState>,
     private formBuilder: FormBuilder
-  ) {
-    if (data) {
-      this.messageData = data;
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
-  }
+  ) {}
 
   onSubmit(): void {
     if (this.messageForm.valid) {
@@ -65,16 +52,6 @@ export class DialogBoxComponent implements OnDestroy {
       );
       this.closeDialog();
     }
-  }
-
-  /**
-   * Delete message from the table and db
-   */
-  deleteMessage(): void {
-    this.store.dispatch(
-      MessageActions.deleteMessage({ messageId: this.messageData.id })
-    );
-    this.closeDialog();
   }
 
   /**

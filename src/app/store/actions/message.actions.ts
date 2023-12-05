@@ -21,10 +21,7 @@ export const createMessage = createAction(
   props<{ message: IMessage }>()
 );
 
-export const createMessageLoaded = createAction(
-  '[Message] Create Loaded',
-  props<{ resultText: string }>()
-);
+export const createMessageSuccess = createAction('[Message] Create Success');
 
 export const createMessageLoadError = createAction(
   '[Message] Create Not Loaded',
@@ -37,10 +34,7 @@ export const deleteMessage = createAction(
   props<{ messageId: string }>()
 );
 
-export const deleteMessageLoaded = createAction(
-  '[Message] Delete Loaded',
-  props<{ resultText: string }>()
-);
+export const deleteMessageSuccess = createAction('[Message] Delete Success');
 
 export const deleteMessageLoadError = createAction(
   '[Message] Delete Not Loaded',

@@ -1,4 +1,4 @@
-<div class="create-message" *ngIf="!messageData">
+<div class="create-message">
   <h1 mat-dialog-title>
     <strong>New Message</strong>
   </h1>
@@ -72,23 +72,5 @@
         Cancel
       </button>
     </div>
-  </div>
-</div>
-
-<div class="delete-message" *ngIf="messageData">
-  <h1 mat-dialog-title>
-    <strong>Delete Message</strong>
-  </h1>
-  <div mat-dialog-content>
-    <p>
-      Sure to delete <b>{{ data.name }}</b
-      >?
-    </p>
-  </div>
-  <div class="button-wrapper-delete" mat-dialog-actions>
-    <button mat-raised-button color="warn" (click)="deleteMessage()">
-      Delete
-    </button>
-    <button mat-raised-button (click)="closeDialog()">Cancel</button>
   </div>
 </div>

@@ -5,13 +5,11 @@ import { IMessage } from 'src/app/interfaces/message.interface';
 
 export interface AppState {
   messages: IMessage[];
-  resultText: string | null;
   error: string | null;
 }
 
 export const initialState: AppState = {
   messages: [],
-  resultText: null,
   error: null,
 };
 
@@ -48,10 +46,9 @@ export const MessageReducers = createReducer(
 
     return result;
   }),
-  on(MessageActions.createMessageLoaded, (state, { resultText }) => {
+  on(MessageActions.createMessageSuccess, (state) => {
     const result = {
       ...state,
-      resultText: resultText,
     };
     return result;
   }),
@@ -59,7 +56,6 @@ export const MessageReducers = createReducer(
     const result = {
       ...state,
       error: error,
-      resultText: null,
     };
     return result;
   }),
@@ -74,10 +70,9 @@ export const MessageReducers = createReducer(
     };
     return result;
   }),
-  on(MessageActions.deleteMessageLoaded, (state, { resultText }) => {
+  on(MessageActions.deleteMessageSuccess, (state) => {
     const result = {
       ...state,
-      resultText: resultText,
     };
     return result;
   }),
@@ -85,7 +80,6 @@ export const MessageReducers = createReducer(
     const result = {
       ...state,
       error: error,
-      resultText: null,
     };
     return result;
   })

@@ -8,9 +8,4 @@ export const selectAllMessages = createSelector(
   (state) => state.messages
 );
 
-export const selectResultText = createSelector(
-  messagesFeature,
-  (state) => state.resultText
-);
-
 export const selectState = createSelector(messagesFeature, (state) => state);
