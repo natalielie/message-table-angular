@@ -72,14 +72,13 @@ export class MessagesPageComponent implements OnInit, OnDestroy {
    * open a dialog box
    */
   openDialog(message = null): void {
-    let dialogRef;
     if (message) {
-      dialogRef = this.dialog.open(DialogBoxComponent, {
+      let dialogRef = this.dialog.open(DialogBoxComponent, {
         width: this.dialogDeleteWidth,
         data: message,
       });
     } else {
-      dialogRef = this.dialog.open(DialogBoxComponent, {
+      let dialogRef = this.dialog.open(DialogBoxComponent, {
         width: this.dialogCreateWidth,
         height: this.dialogCreateHeight,
       });

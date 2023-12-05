@@ -13,7 +13,4 @@ export const selectResultText = createSelector(
   (state) => state.resultText
 );
 
-export const selectError = createSelector(
-  messagesFeature,
-  (state) => state.error
-);
+export const selectState = createSelector(messagesFeature, (state) => state);

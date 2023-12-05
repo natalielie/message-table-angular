@@ -7,14 +7,14 @@ import {
   FormControl,
   FormGroupDirective,
 } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, last, take, takeLast, takeUntil, timer } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import * as MessageActions from '../../../../store/actions/message.actions';
 import { AppState } from 'src/app/store/reducers/message.reducers';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IMessage } from 'src/app/interfaces/message.interface';
-import { selectResultText } from 'src/app/store/selectors/message.selectors';
+import { selectState } from 'src/app/store/selectors/message.selectors';
 
 /**
  * A component of a dialog box
@@ -31,9 +31,6 @@ export class DialogBoxComponent implements OnDestroy {
    */
   @ViewChild('messageForm')
   formReference?: FormGroupDirective;
-
-  /** a text to show in the snackbar */
-  resultText!: string;
 
   /** an option to show in the snackbar */
   action = 'Ok';
@@ -73,11 +70,9 @@ export class DialogBoxComponent implements OnDestroy {
       this.store.dispatch(
         MessageActions.createMessage({ message: this.messageForm.value })
       );
-      this.store.select(selectResultText).subscribe((value) => {
-        this.closeDialog();
-        this.resultText = value ?? 'Something bad happened, try again';
-        this.openSnackBar(this.resultText, this.action);
-      });
+      this.setResultText();
+
+      this.closeDialog();
     }
   }
 
@@ -88,11 +83,9 @@ export class DialogBoxComponent implements OnDestroy {
     this.store.dispatch(
       MessageActions.deleteMessage({ messageId: this.messageData.id })
     );
-    this.store.select(selectResultText).subscribe((value) => {
-      this.closeDialog();
-      this.resultText = value ?? 'Something bad happened, try again';
-      this.openSnackBar(this.resultText, this.action);
-    });
+    this.setResultText();
+
+    this.closeDialog();
   }
 
   /**
@@ -106,6 +99,18 @@ export class DialogBoxComponent implements OnDestroy {
   private openSnackBar(message: string, action: string): void {
     this._snackBar.open(message, action, {
       duration: this.snackbarDuration,
+    });
+  }
+
+  private setResultText(): void {
+    this.store.select(selectState).subscribe((value) => {
+      if (value.resultText) {
+        let resultText = value.resultText;
+        this.openSnackBar(resultText, this.action);
+      } else {
+        let resultText = value.error!;
+        this.openSnackBar(resultText, this.action);
+      }
     });
   }
 }
