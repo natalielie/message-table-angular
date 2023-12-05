@@ -33,15 +33,20 @@ import {
 } from '@angular/fire/analytics';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { HttpClientModule } from '@angular/common/http';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getDatabase, provideDatabase } from '@angular/fire/database';
 import { HomeComponent } from './components/home/home.component';
-import { MessagesPageComponent } from './components/messages-page/messages-page.component';
+import { MessagesPageComponent } from './lazy-loading/component/messages-page/messages-page.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { analytics, app, firebaseConfig } from 'src/environment/environment';
-import { DialogBoxComponent } from './components/messages-page/dialog-box/dialog-box.component';
+import { DialogBoxComponent } from './lazy-loading/component/messages-page/dialog-box/dialog-box.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
+import { MessageEffects } from './store/effects/message.effects';
+import { MessageReducers } from './store/reducers/message.reducers';
 
 @NgModule({
   declarations: [
@@ -57,6 +62,9 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    StoreModule.forRoot({ messages: MessageReducers }),
+    EffectsModule.forRoot([MessageEffects]),
+    StoreDevtoolsModule.instrument({}),
     MatButtonModule,
     MatIconModule,
     MatMenuModule,

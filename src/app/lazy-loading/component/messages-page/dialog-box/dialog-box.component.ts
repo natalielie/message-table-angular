@@ -7,11 +7,14 @@ import {
   FormControl,
   FormGroupDirective,
 } from '@angular/forms';
-import { Subject, catchError, of, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
 
-import { FirebaseService } from 'src/app/services/firebase.service';
+import * as MessageActions from '../../../../store/actions/message.actions';
+import { AppState } from 'src/app/store/reducers/message.reducers';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IMessage } from 'src/app/interfaces/message.interface';
+import { selectResultText } from 'src/app/store/selectors/message.selectors';
 
 /**
  * A component of a dialog box
@@ -51,7 +54,7 @@ export class DialogBoxComponent implements OnDestroy {
   constructor(
     public dialogRef: MatDialogRef<DialogBoxComponent>,
     @Inject(MAT_DIALOG_DATA) public data: IMessage,
-    public firebaseService: FirebaseService,
+    private store: Store<AppState>,
     private formBuilder: FormBuilder,
     private _snackBar: MatSnackBar
   ) {
@@ -67,22 +70,14 @@ export class DialogBoxComponent implements OnDestroy {
 
   onSubmit(): void {
     if (this.messageForm.valid) {
-      this.firebaseService
-        .sendMessage(this.messageForm.value)
-        .pipe(
-          takeUntil(this.destroy$),
-          catchError(() =>
-            of(
-              (this.resultText = 'Message was not send, try again'),
-              this.openSnackBar(this.resultText, this.action)
-            )
-          )
-        )
-        .subscribe(() => {
-          this.closeDialog();
-          this.resultText = 'Message was sent!';
-          this.openSnackBar(this.resultText, this.action);
-        });
+      this.store.dispatch(
+        MessageActions.createMessage({ message: this.messageForm.value })
+      );
+      this.store.select(selectResultText).subscribe((value) => {
+        this.closeDialog();
+        this.resultText = value ?? 'Something bad happened, try again';
+        this.openSnackBar(this.resultText, this.action);
+      });
     }
   }
 
@@ -90,22 +85,14 @@ export class DialogBoxComponent implements OnDestroy {
    * Delete message from the table and db
    */
   deleteMessage(): void {
-    this.firebaseService
-      .deleteMessage(this.messageData.id)
-      .pipe(
-        takeUntil(this.destroy$),
-        catchError(() =>
-          of(
-            (this.resultText = 'Message was not removed, try again'),
-            this.openSnackBar(this.resultText, this.action)
-          )
-        )
-      )
-      .subscribe(() => {
-        this.closeDialog();
-        this.resultText = 'Message was removed';
-        this.openSnackBar(this.resultText, this.action);
-      });
+    this.store.dispatch(
+      MessageActions.deleteMessage({ messageId: this.messageData.id })
+    );
+    this.store.select(selectResultText).subscribe((value) => {
+      this.closeDialog();
+      this.resultText = value ?? 'Something bad happened, try again';
+      this.openSnackBar(this.resultText, this.action);
+    });
   }
 
   /**

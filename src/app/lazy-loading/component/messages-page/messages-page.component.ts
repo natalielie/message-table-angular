@@ -4,10 +4,13 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject, takeUntil } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 import { DialogBoxComponent } from './dialog-box/dialog-box.component';
 import { IMessage } from 'src/app/interfaces/message.interface';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import * as MessageActions from '../../../store/actions/message.actions';
+import { AppState } from 'src/app/store/reducers/message.reducers';
+import { selectAllMessages } from 'src/app/store/selectors/message.selectors';
 
 /**
  * a component of the Message Page
@@ -26,6 +29,9 @@ export class MessagesPageComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['id', 'date', 'name', 'text', 'action'];
 
   /** data for a table */
+
+  /** an observable of assessment data */
+  dataSource$ = this.store.select(selectAllMessages);
   dataSource = new MatTableDataSource<IMessage>([]);
 
   maxMessageLength = 100;
@@ -40,24 +46,21 @@ export class MessagesPageComponent implements OnInit, OnDestroy {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(
-    public dialog: MatDialog,
-    private firebaseService: FirebaseService
-  ) {}
+  constructor(public dialog: MatDialog, private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.firebaseService
-      .getMessages()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((messages) => {
-        this.dataSource.data = messages;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        if (this.paginator) {
-          this.paginator.pageIndex = this.page;
-          this.paginator.pageSize = this.pageSize;
-        }
-      });
+    // get messages
+    this.store.dispatch(MessageActions.getMessages());
+
+    this.dataSource$.pipe(takeUntil(this.destroy$)).subscribe((messages) => {
+      this.dataSource.data = messages;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      if (this.paginator) {
+        this.paginator.pageIndex = this.page;
+        this.paginator.pageSize = this.pageSize;
+      }
+    });
   }
 
   ngOnDestroy(): void {

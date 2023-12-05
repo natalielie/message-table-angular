@@ -43,7 +43,7 @@ export class FirebaseService {
   /**
    * send a message to a db
    */
-  sendMessage(message: IMessage): Observable<boolean> {
+  createMessage(message: IMessage): Observable<boolean> {
     this.loaderService.showLoader();
     return new Observable<boolean>((observer) => {
       this.loaderService.showLoader();

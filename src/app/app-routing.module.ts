@@ -13,9 +13,9 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import(
-        './components/messages-page/lazy-loading/lazy-loading.module'
-      ).then((m) => m.LazyLoadingModule),
+      import('./lazy-loading/lazy-loading.module').then(
+        (m) => m.LazyLoadingModule
+      ),
   },
 ];
 
