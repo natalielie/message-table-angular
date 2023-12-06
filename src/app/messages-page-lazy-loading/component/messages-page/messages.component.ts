@@ -7,19 +7,20 @@ import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { IMessage } from 'src/app/interfaces/message.interface';
-import * as MessageActions from '../../../store/actions/message.actions';
 import { AppState } from 'src/app/store/reducers/message.reducers';
 import { selectAllMessages } from 'src/app/store/selectors/message.selectors';
 import { DeleteDialogBoxComponent } from './dialog-box-delete/dialog-box-delete.component';
 import { CreateDialogBoxComponent } from './dialog-box-create/dialog-box-create.component';
+import { DialogBoxSize } from 'src/app/shared/globals';
+import { getMessages } from 'src/app/store/actions/message.actions';
 
 /**
  * a component of the Message Page
  */
 @Component({
   selector: 'app-messages-page',
-  templateUrl: './messages-page.component.html',
-  styleUrls: ['./messages-page.component.scss'],
+  templateUrl: './messages.component.html',
+  styleUrls: ['./messages.component.scss'],
 })
 export class MessagesPageComponent implements OnInit, OnDestroy {
   /** Table paginator */
@@ -27,29 +28,29 @@ export class MessagesPageComponent implements OnInit, OnDestroy {
   /** Table sort */
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns: string[] = ['id', 'date', 'name', 'text', 'action'];
+  readonly displayedColumns: string[] = [
+    'id',
+    'date',
+    'name',
+    'text',
+    'action',
+  ];
 
   /** an observable of assessment data */
   dataSource$ = this.store.select(selectAllMessages);
   dataSource = new MatTableDataSource<IMessage>([]);
 
-  maxMessageLength = 100;
-
-  dialogDeleteWidth = '400px';
-  dialogCreateWidth = '500px';
-  dialogCreateHeight = '510px';
-
   /** data for a paginator */
   page = 0;
   pageSize = 5;
 
-  destroy$: Subject<boolean> = new Subject<boolean>();
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(public dialog: MatDialog, private store: Store<AppState>) {}
 
   ngOnInit(): void {
     // get messages
-    this.store.dispatch(MessageActions.getMessages());
+    this.store.dispatch(getMessages());
 
     this.dataSource$.pipe(takeUntil(this.destroy$)).subscribe((messages) => {
       this.dataSource.data = messages;
@@ -68,31 +69,22 @@ export class MessagesPageComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * open a dialog box
+   * open a create dialog box
    */
-  openDialog(message = null): void {
-    let dialogRef;
-    if (message) {
-      dialogRef = this.dialog.open(DeleteDialogBoxComponent, {
-        width: this.dialogDeleteWidth,
-        data: message,
-      });
-    } else {
-      dialogRef = this.dialog.open(CreateDialogBoxComponent, {
-        width: this.dialogCreateWidth,
-        height: this.dialogCreateHeight,
-      });
-    }
+  openCreateDialog(): void {
+    let dialogRef = this.dialog.open(CreateDialogBoxComponent, {
+      width: DialogBoxSize.dialogCreateWidth,
+      height: DialogBoxSize.dialogCreateHeight,
+    });
   }
 
   /**
-   * trim a message text up to max count symbols
+   * open a delete dialog box
    */
-  showMessageText(text: string): string {
-    if (text.length <= this.maxMessageLength) {
-      return text;
-    } else {
-      return `${text.substring(0, this.maxMessageLength)}...`;
-    }
+  openDeleteDialog(message: IMessage): void {
+    let dialogRef = this.dialog.open(DeleteDialogBoxComponent, {
+      width: DialogBoxSize.dialogDeleteWidth,
+      data: message,
+    });
   }
 }

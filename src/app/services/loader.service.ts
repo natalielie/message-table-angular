@@ -10,9 +10,8 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 export class LoaderService {
   private apiCount = 0;
   private isLoadingSubject = new BehaviorSubject<boolean>(false);
-  isLoading$ = this.isLoadingSubject.asObservable();
 
-  constructor() {}
+  isLoading$ = this.isLoadingSubject.asObservable();
 
   showLoader() {
     if (this.apiCount === 0) {

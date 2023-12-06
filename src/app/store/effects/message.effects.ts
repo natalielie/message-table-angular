@@ -3,53 +3,72 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-import * as MessageActions from '../actions/message.actions';
-import { FirebaseService } from 'src/app/services/firebase.service';
+import { MessagesService } from 'src/app/services/messages.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
+import {
+  createMessage,
+  createMessageLoadError,
+  createMessageSuccess,
+  deleteMessage,
+  deleteMessageLoadError,
+  deleteMessageSuccess,
+  getMessages,
+  messagesLoadError,
+  messagesLoaded,
+} from '../actions/message.actions';
 
 @Injectable()
 export class MessageEffects {
   constructor(
     private actions$: Actions,
-    private firebaseService: FirebaseService,
+    private messagesService: MessagesService,
     private snackBarService: SnackbarService
   ) {}
 
-  public getMessages$ = createEffect(() =>
+  getMessages$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(MessageActions.getMessages),
+      ofType(getMessages),
       mergeMap(() => {
-        return this.firebaseService.getMessages().pipe(
-          map((response) =>
-            MessageActions.messagesLoaded({ messagesResponse: response })
-          ),
-          catchError(() =>
-            of(
-              MessageActions.messagesLoadError({
+        return this.messagesService.getMessages().pipe(
+          map((response) => messagesLoaded({ messagesResponse: response })),
+          catchError(() => {
+            this.snackBarService.openSnackBar('Messages loading failed', {
+              action: 'OK',
+              duration: 3000,
+            });
+            return of(
+              messagesLoadError({
                 error: 'Messages loading failed',
               })
-            )
-          )
+            );
+          })
         );
       })
     )
   );
 
-  public createMessage$ = createEffect(() =>
+  createMessage$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(MessageActions.createMessage),
+      ofType(createMessage),
       mergeMap(({ message }) => {
-        return this.firebaseService.createMessage(message).pipe(
+        return this.messagesService.createMessage(message).pipe(
           map(() => {
-            this.snackBarService.openSnackBar('Message was sent!');
-            return MessageActions.createMessageSuccess();
+            this.snackBarService.openSnackBar('Message was sent!', {
+              action: 'OK',
+              duration: 3000,
+            });
+            return createMessageSuccess();
           }),
           catchError(() => {
             this.snackBarService.openSnackBar(
-              'Message was not sent, try again'
+              'Message was not sent, try again',
+              {
+                action: 'OK',
+                duration: 3000,
+              }
             );
             return of(
-              MessageActions.createMessageLoadError({
+              createMessageLoadError({
                 error: 'Message was not sent',
               })
             );
@@ -59,19 +78,25 @@ export class MessageEffects {
     )
   );
 
-  public deleteMessage$ = createEffect(() =>
+  deleteMessage$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(MessageActions.deleteMessage),
+      ofType(deleteMessage),
       mergeMap(({ messageId }) => {
-        return this.firebaseService.deleteMessage(messageId).pipe(
+        return this.messagesService.deleteMessage(messageId).pipe(
           map(() => {
-            this.snackBarService.openSnackBar('Message was deleted!');
-            return MessageActions.deleteMessageSuccess();
+            this.snackBarService.openSnackBar('Message was deleted!', {
+              action: 'OK',
+              duration: 3000,
+            });
+            return deleteMessageSuccess();
           }),
           catchError(() => {
-            this.snackBarService.openSnackBar('Deletion failed, try again');
+            this.snackBarService.openSnackBar('Deletion failed, try again', {
+              action: 'OK',
+              duration: 3000,
+            });
             return of(
-              MessageActions.deleteMessageLoadError({
+              deleteMessageLoadError({
                 error: 'Deletion failed',
               })
             );

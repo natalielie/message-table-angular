@@ -9,9 +9,9 @@ import {
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
 
-import * as MessageActions from '../../../../store/actions/message.actions';
 import { AppState } from 'src/app/store/reducers/message.reducers';
 import { IMessage } from 'src/app/interfaces/message.interface';
+import { createMessage } from 'src/app/store/actions/message.actions';
 
 /**
  * A component of a dialog box
@@ -47,9 +47,7 @@ export class CreateDialogBoxComponent {
 
   onSubmit(): void {
     if (this.messageForm.valid) {
-      this.store.dispatch(
-        MessageActions.createMessage({ message: this.messageForm.value })
-      );
+      this.store.dispatch(createMessage({ message: this.messageForm.value }));
       this.closeDialog();
     }
   }

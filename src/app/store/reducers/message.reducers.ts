@@ -1,7 +1,17 @@
 import { createReducer, on } from '@ngrx/store';
 
-import * as MessageActions from '../actions/message.actions';
 import { IMessage } from 'src/app/interfaces/message.interface';
+import {
+  getMessages,
+  messagesLoaded,
+  messagesLoadError,
+  createMessage,
+  createMessageSuccess,
+  createMessageLoadError,
+  deleteMessage,
+  deleteMessageSuccess,
+  deleteMessageLoadError,
+} from '../actions/message.actions';
 
 export interface AppState {
   messages: IMessage[];
@@ -16,20 +26,20 @@ export const initialState: AppState = {
 export const MessageReducers = createReducer(
   initialState,
   // all messages
-  on(MessageActions.getMessages, (state) => {
+  on(getMessages, (state) => {
     const result = {
       ...state,
     };
     return result;
   }),
-  on(MessageActions.messagesLoaded, (state, { messagesResponse }) => {
+  on(messagesLoaded, (state, { messagesResponse }) => {
     const result = {
       ...state,
       messages: messagesResponse,
     };
     return result;
   }),
-  on(MessageActions.messagesLoadError, (state, { error }) => {
+  on(messagesLoadError, (state, { error }) => {
     const result = {
       ...state,
       messages: [],
@@ -38,7 +48,7 @@ export const MessageReducers = createReducer(
     return result;
   }),
   // create a message
-  on(MessageActions.createMessage, (state, { message }) => {
+  on(createMessage, (state, { message }) => {
     const result = {
       ...state,
       messages: [...state.messages, message],
@@ -46,13 +56,13 @@ export const MessageReducers = createReducer(
 
     return result;
   }),
-  on(MessageActions.createMessageSuccess, (state) => {
+  on(createMessageSuccess, (state) => {
     const result = {
       ...state,
     };
     return result;
   }),
-  on(MessageActions.createMessageLoadError, (state, { error }) => {
+  on(createMessageLoadError, (state, { error }) => {
     const result = {
       ...state,
       error: error,
@@ -60,7 +70,7 @@ export const MessageReducers = createReducer(
     return result;
   }),
   // delete a message
-  on(MessageActions.deleteMessage, (state, { messageId }) => {
+  on(deleteMessage, (state, { messageId }) => {
     const messages = [...state.messages];
     const index = messages.findIndex((message) => message.id === messageId);
     messages.splice(index, 1);
@@ -70,13 +80,13 @@ export const MessageReducers = createReducer(
     };
     return result;
   }),
-  on(MessageActions.deleteMessageSuccess, (state) => {
+  on(deleteMessageSuccess, (state) => {
     const result = {
       ...state,
     };
     return result;
   }),
-  on(MessageActions.deleteMessageLoadError, (state, { error }) => {
+  on(deleteMessageLoadError, (state, { error }) => {
     const result = {
       ...state,
       error: error,

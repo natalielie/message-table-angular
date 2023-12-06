@@ -11,7 +11,9 @@ import { LoaderService } from './loader.service';
 @Injectable({
   providedIn: 'root',
 })
-export class FirebaseService {
+export class MessagesService {
+  readonly api = this.fbs.collection('messages');
+
   constructor(
     private fbs: AngularFirestore,
     private loaderService: LoaderService
@@ -22,22 +24,20 @@ export class FirebaseService {
    */
   getMessages(): Observable<IMessage[]> {
     this.loaderService.showLoader();
-    return this.fbs
-      .collection('messages')
-      .snapshotChanges()
-      .pipe(
-        map((actions) => {
-          return actions.map((action) => {
-            const data = action.payload.doc.data() as IMessage;
-            data.id = action.payload.doc.id;
-            return { ...data };
-          }, this.loaderService.hideLoader());
-        }),
-        catchError((error) => {
-          console.error('An error occurred:', error);
-          return throwError('Something went wrong');
-        })
-      );
+    return this.api.snapshotChanges().pipe(
+      map((actions) => {
+        return actions.map((action) => {
+          const data = action.payload.doc.data() as IMessage;
+          data.id = action.payload.doc.id;
+          return { ...data };
+        }, this.loaderService.hideLoader());
+      }),
+      catchError((error) => {
+        console.error('An error occurred:', error);
+        this.loaderService.hideLoader();
+        return throwError('Something went wrong');
+      })
+    );
   }
 
   /**
@@ -47,8 +47,7 @@ export class FirebaseService {
     this.loaderService.showLoader();
     return new Observable<boolean>((observer) => {
       this.loaderService.showLoader();
-      this.fbs
-        .collection('messages')
+      this.api
         .add({
           name: message.name,
           text: message.text,
@@ -60,6 +59,7 @@ export class FirebaseService {
         })
         .catch((error) => {
           console.error('Error adding document: ', error);
+          this.loaderService.hideLoader();
           observer.next(false);
           observer.complete();
         });
@@ -73,8 +73,7 @@ export class FirebaseService {
     this.loaderService.showLoader();
     return new Observable<boolean>((observer) => {
       this.loaderService.showLoader();
-      this.fbs
-        .collection('messages')
+      this.api
         .doc(messageId)
         .delete()
         .then(() => {

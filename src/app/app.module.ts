@@ -40,7 +40,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getDatabase, provideDatabase } from '@angular/fire/database';
 import { HomeComponent } from './components/home/home.component';
-import { MessagesPageComponent } from './messages-page-lazy-loading/component/messages-page/messages-page.component';
+import { MessagesPageComponent } from './messages-page-lazy-loading/component/messages-page/messages.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { analytics, firebaseConfig } from 'src/environment/environment';
 import { CreateDialogBoxComponent } from './messages-page-lazy-loading/component/messages-page/dialog-box-create/dialog-box-create.component';
@@ -48,6 +48,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { MessageEffects } from './store/effects/message.effects';
 import { MessageReducers } from './store/reducers/message.reducers';
 import { DeleteDialogBoxComponent } from './messages-page-lazy-loading/component/messages-page/dialog-box-delete/dialog-box-delete.component';
+import { ShortenMessagePipe } from './shared/pipes/shorten-message.pipe';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { DeleteDialogBoxComponent } from './messages-page-lazy-loading/component
     DeleteDialogBoxComponent,
     NavbarComponent,
     SpinnerComponent,
+    ShortenMessagePipe,
   ],
   imports: [
     BrowserModule,

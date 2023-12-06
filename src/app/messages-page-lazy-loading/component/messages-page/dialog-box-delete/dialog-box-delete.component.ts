@@ -2,9 +2,9 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 
-import * as MessageActions from '../../../../store/actions/message.actions';
 import { AppState } from 'src/app/store/reducers/message.reducers';
 import { IMessage } from 'src/app/interfaces/message.interface';
+import { deleteMessage } from 'src/app/store/actions/message.actions';
 
 /**
  * A component of a dialog box
@@ -31,9 +31,7 @@ export class DeleteDialogBoxComponent {
    * Delete message from the table and db
    */
   deleteMessage(): void {
-    this.store.dispatch(
-      MessageActions.deleteMessage({ messageId: this.messageData.id })
-    );
+    this.store.dispatch(deleteMessage({ messageId: this.messageData.id }));
     this.closeDialog();
   }
 

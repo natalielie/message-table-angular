@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { homePath, messagesPath } from 'src/app/shared/globals';
+import { Pathes } from 'src/app/shared/globals';
 
 /**
  * a component of the navbar for all pages
@@ -14,10 +14,10 @@ export class NavbarComponent {
   constructor(private router: Router) {}
 
   goToHomePage(): void {
-    this.router.navigate([homePath]);
+    this.router.navigate([Pathes.homePath]);
   }
 
   goToMessagesPage(): void {
-    this.router.navigate([messagesPath]);
+    this.router.navigate([Pathes.messagesPath]);
   }
 }

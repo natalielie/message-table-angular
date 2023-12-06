@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { MessagesPageComponent } from './component/messages-page/messages-page.component';
-import { messagesPath } from '../shared/globals';
+import { MessagesPageComponent } from './component/messages-page/messages.component';
+import { Pathes } from '../shared/globals';
 
 const routes: Routes = [
-  { path: messagesPath, component: MessagesPageComponent },
+  { path: Pathes.messagesPath, component: MessagesPageComponent },
 ];
 
 /**

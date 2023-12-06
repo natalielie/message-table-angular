@@ -4,3 +4,8 @@ export interface IMessage {
   text: string;
   date: Date;
 }
+
+export interface ISnackbar {
+  action: string;
+  duration: number;
+}

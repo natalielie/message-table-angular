@@ -1,21 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { homePath } from './shared/globals';
+import { Pathes } from './shared/globals';
 import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: homePath, pathMatch: 'full' },
+  { path: Pathes.root, redirectTo: Pathes.homePath, pathMatch: 'full' },
   {
-    path: homePath,
+    path: Pathes.homePath,
     component: HomeComponent,
   },
   {
-    path: '',
+    path: Pathes.root,
     loadChildren: () =>
-      import(
-        './messages-page-lazy-loading/messages-page-lazy-loading.module'
-      ).then((m) => m.LazyLoadingModule),
+      import('./messages-page-lazy-loading/messages.module').then(
+        (m) => m.LazyLoadingModule
+      ),
   },
 ];
 
