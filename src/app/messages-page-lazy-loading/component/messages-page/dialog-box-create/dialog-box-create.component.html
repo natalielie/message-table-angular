@@ -1,0 +1,76 @@
+<div class="create-message">
+  <h1 mat-dialog-title>
+    <strong>New Message</strong>
+  </h1>
+  <div class="btn-close-wrapper">
+    <button class="btn btn-close" mat-button (click)="closeDialog()">×</button>
+  </div>
+  <div mat-dialog-content class="container">
+    <div class="card-body">
+      <form class="form" [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="name field" appearance="outline">
+          <mat-label>Title</mat-label>
+          <input matInput value="" formControlName="name" />
+          <mat-error
+            class="text-danger"
+            *ngIf="
+              messageForm.controls['name'].invalid &&
+              (messageForm.controls['name'].dirty ||
+                messageForm.controls['name'].touched)
+            "
+          >
+            Title is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="text field" appearance="outline">
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            placeholder="Write your message here..."
+            value=""
+            formControlName="text"
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="7"
+            cdkAutosizeMaxRows="10"
+          ></textarea>
+          <mat-error
+            class="text-danger"
+            *ngIf="
+              messageForm.controls['text'].value.length < 1 &&
+              (messageForm.controls['text'].dirty ||
+                messageForm.controls['text'].touched)
+            "
+          >
+            Message text is required
+          </mat-error>
+          <mat-error
+            class="text-danger"
+            *ngIf="
+              messageForm.controls['text'].value.length > 255 &&
+              (messageForm.controls['text'].dirty ||
+                messageForm.controls['text'].touched)
+            "
+          >
+            Message text length should not be more than 255 symbols
+          </mat-error>
+        </mat-form-field>
+
+        <div class="button-wrapper">
+          <button
+            class="btn btn-submit"
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!messageForm.valid"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+      <button class="btn btn-cancel" mat-raised-button (click)="closeDialog()">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>

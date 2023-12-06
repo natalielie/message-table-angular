@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "message-table-56e67": {
+      "hosting": {
+        "message-table-angular": [
+          "message-table-56e67"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "message-table-56e67"
+  }
+}

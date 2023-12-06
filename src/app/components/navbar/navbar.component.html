@@ -1,0 +1,25 @@
+<mat-toolbar color="primary">
+  <span class="fill-remaining-space">
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      #menuTrigger="matMenuTrigger"
+      (mouseover)="menuTrigger.openMenu()"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" [overlapTrigger]="false">
+      <span (mouseleave)="menuTrigger.closeMenu()">
+        <button mat-menu-item (click)="goToHomePage()">
+          <mat-icon>home</mat-icon>
+          <span>Home</span>
+        </button>
+        <button mat-menu-item (click)="goToMessagesPage()">
+          <mat-icon>message</mat-icon>
+          <span>Messages</span>
+        </button>
+      </span>
+    </mat-menu>
+  </span>
+  <span class="fill-remaining-space">Message App</span>
+</mat-toolbar>
